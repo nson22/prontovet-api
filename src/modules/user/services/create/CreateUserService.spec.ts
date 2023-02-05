@@ -13,16 +13,24 @@ describe("List users services", () => {
     it("should be possible create a user", async () => {
         await createUserService.execute({
             name: "John Doe",
-            profile: "admin"
+            profile: "admin",
+            password: "password"
         })
-
-        // expect(user).toHaveProperty("id")
-        // expect(user).toHaveProperty("name")
-        // expect(user).toHaveProperty("profile")
-        // expect(user).toHaveProperty("createdAt")
-        // expect(user).toBeInstanceOf(User)
     })
 
-    it("should be possible to list all users records", async () => {
+    it("should be not possible create an user that already exists", async () => {
+        await createUserService.execute({
+            name: "John Doe",
+            profile: "admin",
+            password: "password"
+        })
+
+        await createUserService.execute({
+            name: "John Doe",
+            profile: "admin",
+            password: "password"
+        })
+
+        expect(new Error().message).toBe(`Error: John Doe already exists in the database.`)
     })
 })

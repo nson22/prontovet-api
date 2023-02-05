@@ -17,12 +17,13 @@ export class UsersRepository implements IUsersRepository{
         return UsersRepository.INSTANCE
     }
 
-    async create({ name, profile}: ICreateUserDTO): Promise<void>{
+    async create({ name, profile, password}: ICreateUserDTO): Promise<void>{
         const user = new User()
 
         Object.assign(user, {
             name,
             profile,
+            password,
             createdAt: new Date()
         })
 

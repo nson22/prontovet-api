@@ -3,6 +3,7 @@ import { randomUUID } from "node:crypto"
 export class User {
     id?: string
     name: string
+    password: string
     profile: "default" | "admin" | "vet"
     createdAt: Date
 
@@ -11,5 +12,6 @@ export class User {
         this.name = "Unknown"
         this.profile = "default"
         this.createdAt = new Date()
+        this.password = ""
     }
 }

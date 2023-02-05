@@ -4,7 +4,7 @@ import {User} from "../../entities/User";
 class UsersRepositoryInMemory implements IUsersRepository {
     users: User[] = [];
 
-    async create({name, profile }: ICreateUserDTO): Promise<void> {
+    async create({name, profile, password }: ICreateUserDTO): Promise<void> {
         const user = new User();
 
         Object.assign(user, {
@@ -13,7 +13,6 @@ class UsersRepositoryInMemory implements IUsersRepository {
         });
 
         this.users.push(user);
-
     }
 
     async findByName(name: string): Promise<User | undefined> {

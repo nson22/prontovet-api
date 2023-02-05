@@ -8,9 +8,9 @@ export class CreateUserController{
     }
 
     async handle(request: Request, response: Response): Promise<Response>{
-        const { name, profile} = request.body
+        const { name, profile, password} = request.body
 
-        await this.createUserService.execute({name, profile})
+        await this.createUserService.execute({name, profile, password})
 
         return response.status(201).send()
     }
