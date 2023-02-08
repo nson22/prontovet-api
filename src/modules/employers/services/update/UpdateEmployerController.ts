@@ -7,9 +7,9 @@ export class UpdateEmployerController {
 
     async handle(request: Request, response: Response): Promise<Response>{
         const { id } = request.params
-        const { name, password } = request.body
+        const { name } = request.body
 
-        await this.updateUserService.execute({id, name, password})
+        await this.updateUserService.execute({id, name})
 
         return response.status(200).send()
     }

@@ -4,6 +4,7 @@ import {listEmployersController} from "../modules/employers/services/list";
 import {deleteEmployersController} from "../modules/employers/services/delete";
 import {updateEmployersController} from "../modules/employers/services/update";
 import {findEmployerByIdController} from "../modules/employers/services/findById";
+import {resetPasswordController} from "../modules/employers/services/password";
 
 export const employersRoute = Router()
 
@@ -25,4 +26,8 @@ employersRoute.put("/:id", (request: Request, response: Response) => {
 
 employersRoute.get("/:id",(request: Request, response: Response) => {
     return  findEmployerByIdController.handle(request, response)
+})
+
+employersRoute.patch("/:id", (request: Request, response: Response) => {
+    return resetPasswordController.handle(request, response)
 })

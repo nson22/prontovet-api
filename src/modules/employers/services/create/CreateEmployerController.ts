@@ -8,8 +8,8 @@ export class CreateEmployerController {
     async handle(request: Request, response: Response): Promise<Response>{
         const { name, password} = request.body
 
-        await this.createUserService.execute(name, password )
+        const employer = await this.createUserService.execute({name, password} )
 
-        return response.status(201).send()
+        return response.status(201).json({employer: employer})
     }
 }

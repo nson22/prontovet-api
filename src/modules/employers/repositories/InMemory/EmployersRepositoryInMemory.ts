@@ -1,7 +1,8 @@
 import {IEmployersRepository} from "../IEmployersRepository";
 import {Employer, EmployerProps} from "../../entities/Employer";
+import {UpdateEmployerProps} from "../EmployersRepository";
 
-class EmployersRepositoryInMemory implements IEmployersRepository {
+export class EmployersRepositoryInMemory implements IEmployersRepository {
     employers: Employer[]
     private static INSTANCE: EmployersRepositoryInMemory
 
@@ -17,7 +18,7 @@ class EmployersRepositoryInMemory implements IEmployersRepository {
         return EmployersRepositoryInMemory.INSTANCE
     }
 
-    async create({ id, name, password, createdAt, updatedAt}: EmployerProps): Promise<void>{
+    async create({ id, name, password, createdAt, updatedAt}: EmployerProps): Promise<Employer>{
         const employer = new Employer();
 
         Object.assign(employer, {
@@ -29,20 +30,22 @@ class EmployersRepositoryInMemory implements IEmployersRepository {
         })
 
         this.employers.push(employer);
+
+        return employer
     }
 
     async list(): Promise<Employer[]>{
         return this.employers
     }
 
-    async update({ id, name, password, updatedAt}: EmployerProps): Promise<void> {
+    async update({ id, name, password, updatedAt}: UpdateEmployerProps): Promise<void> {
         this.employers.map((employer) => {
             if (employer.id === id){
                 return {
                     ...employer,
                     name,
                     password,
-                    updatedAt
+                    updatedAt: new Date()
                 }
             }
             return employer
@@ -60,5 +63,3 @@ class EmployersRepositoryInMemory implements IEmployersRepository {
         return this.employers.find((employer) => employer.id === id);
     }
 }
-
-export { EmployersRepositoryInMemory };
