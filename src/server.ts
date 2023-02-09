@@ -1,7 +1,7 @@
 
 import express, {NextFunction, Request, Response} from "express"
 import * as dotenv from 'dotenv'
-import { employersRoute } from "./routes/employersRoute";
+import { employersRoute } from "./modules/routes/employersRoute";
 import {ServerError} from "./modules/error/ServerError";
 dotenv.config()
 
@@ -13,7 +13,7 @@ server.use(express.json())
 server.use("/employers", employersRoute)
 
 server.use(
-    (err: Error, request: Request, response: Response, next: NextFunction) => {
+    (err: Error, request: Request, response: Response, _next: NextFunction) => {
         if (err instanceof ServerError) {
             return response.status(err.statusCode).json({
                 message: err.message,

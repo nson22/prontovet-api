@@ -1,10 +1,10 @@
 import { Request, Response, Router } from "express"
-import {createEmployersController} from "../modules/employers/services/create";
-import {listEmployersController} from "../modules/employers/services/list";
-import {deleteEmployersController} from "../modules/employers/services/delete";
-import {updateEmployersController} from "../modules/employers/services/update";
-import {findEmployerByIdController} from "../modules/employers/services/findById";
-import {resetPasswordController} from "../modules/employers/services/password";
+import {createEmployersController} from "../employers/services/create";
+import {listEmployersController} from "../employers/services/list";
+import {deleteEmployersController} from "../employers/services/delete";
+import {updateEmployersController} from "../employers/services/update";
+import {findEmployerByIdController} from "../employers/services/findById";
+import {resetPasswordController} from "../employers/services/password";
 
 export const employersRoute = Router()
 

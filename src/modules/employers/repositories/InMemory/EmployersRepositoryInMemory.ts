@@ -1,22 +1,10 @@
-import {IEmployersRepository} from "../IEmployersRepository";
+import {IEmployersRepository, UpdateEmployerProps} from "../IEmployersRepository";
 import {Employer, EmployerProps} from "../../entities/Employer";
-import {UpdateEmployerProps} from "../EmployersRepository";
+import {ServerError} from "../../../error/ServerError";
+import {ERROR_MESSAGES} from "../../resources/ErrorMessages";
 
 export class EmployersRepositoryInMemory implements IEmployersRepository {
-    employers: Employer[]
-    private static INSTANCE: EmployersRepositoryInMemory
-
-    private constructor() {
-        this.employers = []
-    }
-
-    public static getInstance(): EmployersRepositoryInMemory{
-        if(!EmployersRepositoryInMemory.INSTANCE){
-            EmployersRepositoryInMemory.INSTANCE = new EmployersRepositoryInMemory()
-        }
-
-        return EmployersRepositoryInMemory.INSTANCE
-    }
+    employers: Employer[] = []
 
     async create({ id, name, password, createdAt, updatedAt}: EmployerProps): Promise<Employer>{
         const employer = new Employer();
@@ -38,25 +26,29 @@ export class EmployersRepositoryInMemory implements IEmployersRepository {
         return this.employers
     }
 
-    async update({ id, name, password, updatedAt}: UpdateEmployerProps): Promise<void> {
-        this.employers.map((employer) => {
+    async update({ id, name, updatedAt}: UpdateEmployerProps): Promise<void> {
+       this.employers.map((employer) => {
             if (employer.id === id){
                 return {
                     ...employer,
                     name,
-                    password,
-                    updatedAt: new Date()
+                    updatedAt
                 }
             }
             return employer
-        })
+       })
     }
 
-    async delete(id: string): Promise<void> {
+    async delete(id: string): Promise<boolean> {
         const index = this.employers.findIndex((employer) => {
             return employer.id === id
         })
-        this.employers.splice(index, 1)
+
+        if(!this.employers.splice(index, 1)){
+            throw new ServerError(ERROR_MESSAGES.EMPLOYER_NOT_FOUND)
+        }
+
+        return true
     }
 
     async findById(id: string): Promise<Employer | undefined> {

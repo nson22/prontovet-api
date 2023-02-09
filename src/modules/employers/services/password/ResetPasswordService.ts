@@ -1,8 +1,9 @@
 import {IEmployersRepository} from "../../repositories/IEmployersRepository";
 import {ServerError} from "../../../error/ServerError";
-import {MESSAGES} from "../update/UpdateEmployerService";
+import {ERROR_MESSAGES} from "../../resources/ErrorMessages";
+import {hash} from "bcrypt";
 
-interface ResetPasswordServiceRequest {
+export interface ResetPasswordServiceRequest {
     id: string
     password: string
 }
@@ -10,13 +11,15 @@ export class ResetPasswordService{
     constructor(private employerRepository: IEmployersRepository) {
     }
 
-    async execute({id, password}: ResetPasswordServiceRequest) {
-        const employerExists = this.employerRepository.findById(id)
+    async execute({id, password}: ResetPasswordServiceRequest): Promise<void> {
+        const employerExists = await this.employerRepository.findById(id)
 
         if(!employerExists) {
-            throw new ServerError(MESSAGES.EMPLOYER_NOT_FOUND)
+            throw new ServerError(ERROR_MESSAGES.EMPLOYER_NOT_FOUND)
         }
 
-        await this.employerRepository.update({ id, password })
+        const hashedPassword = await hash(password, 8)
+
+        await this.employerRepository.update({ id, password: hashedPassword })
     }
 }

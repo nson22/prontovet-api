@@ -1,16 +1,18 @@
 import {IEmployersRepository} from "../../repositories/IEmployersRepository";
+import {ERROR_MESSAGES} from "../../resources/ErrorMessages";
 
 export class DeleteEmployerService {
-    constructor(private usersRepository: IEmployersRepository) {
+    constructor(private employersRepository: IEmployersRepository) {
     }
 
-    async execute(id: string): Promise<void>{
-        const employerExists = await this.usersRepository.findById(id)
+    async execute(id: string): Promise<boolean | undefined>{
+        const employerExists = await this.employersRepository.findById(id)
 
         if(!employerExists) {
-            throw new Error(`Usuário não encontrado na base de dados.`)
+            throw new Error(ERROR_MESSAGES.EMPLOYER_NOT_FOUND)
         }
 
-        await this.usersRepository.delete(id)
+        return await this.employersRepository.delete(id)
+
     }
 }

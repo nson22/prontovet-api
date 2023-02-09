@@ -1,26 +1,22 @@
 import {EmployersRepository} from "../../repositories/EmployersRepository";
-import {Employer} from "../../entities/Employer";
+import {ERROR_MESSAGES} from "../../resources/ErrorMessages";
 
-interface UpdateEmployerRequest {
+export interface UpdateEmployerRequest {
     id: string
     name: string
-}
-
-export const MESSAGES = {
-    EMPLOYER_NOT_FOUND: `Usuário não encontrado no banco de dados.`
 }
 
 export class UpdateEmployerService {
     constructor(private employersRepository: EmployersRepository) {
     }
     async execute({id, name}: UpdateEmployerRequest): Promise<void> {
-       const employer = await this.employersRepository.findById(id)
+       const employerExists = await this.employersRepository.findById(id)
 
-        if(!employer) {
-            throw new Error(MESSAGES.EMPLOYER_NOT_FOUND)
+        if(!employerExists) {
+            throw new Error(ERROR_MESSAGES.EMPLOYER_NOT_FOUND)
         }
 
-        await this.employersRepository.update({id, name})
+        await this.employersRepository.update({id, name, updatedAt: new Date()})
 
     }
 }
